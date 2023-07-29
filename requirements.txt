@@ -6,3 +6,5 @@ altair
 numpy
 pydeck
 streamlit
+idendrogram==0.2.0
+idendrogram-streamlit-component==0.2.2
