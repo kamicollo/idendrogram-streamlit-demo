@@ -1,6 +1,7 @@
 import streamlit as st
 import geopandas as gpd
 import pydeck as pdk
+from scipy import sparse
 import pickle
 import idendrogram
 from idendrogram_streamlit_component import StreamlitConverter
@@ -24,11 +25,11 @@ you can choose which cluster you are interested in, and then interact with the d
 
 @st.cache_data()
 def get_data():
-    return gpd.read_parquet("demo/data/vilnius.parquet")
+    return gpd.read_parquet("data/vilnius.parquet")
 
-@st.cache_data()
+
 def get_model():
-    with open("demo/data/sp_cluster_model.pickle", "rb") as f:
+    with open("data/sklearn_data.pickle", "rb") as f:
         return pickle.load(f)
 
 def get_selected_nodes_and_links(cl_data):
@@ -162,13 +163,12 @@ def delete_selection():
 cluster = st.selectbox("Select cluster of interest", options=[0,1,2], format_func= lambda x: ["Center", "Northeast", "West"][x], on_change = delete_selection)
 
 if cluster is not None:    
-    data_for_clustering = get_data()        
-    model = get_model()
-    cl_data = idendrogram.ScikitLearnClusteringData(model)
+    data_for_clustering = get_data()            
+    cl_data = get_model()    
     clusters, o_dendrogram = get_selected_nodes_and_links(cl_data=cl_data)    
     dendrogram = form_dendrogram(clusters[cluster], o_dendrogram)    
 
-    converter = StreamlitConverter(release=False)
+    converter = StreamlitConverter(release=True)
 
     col1, col2 = st.columns((4,2))
 
@@ -178,8 +178,7 @@ if cluster is not None:
             orientation="bottom", scale="symlog", show_nodes=True, key=cluster,
             margins={'top': 50, 'bottom': 50, 'left': 50, 'right': 50}
         )
-        if p is not None:
-            st.write(p)
+        if p is not None:            
             st.session_state['selection'] = p            
 
     if 'selection' in st.session_state:        

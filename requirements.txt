@@ -1,0 +1,8 @@
+scipy
+pywavelets
+hdbscan
+geopandas
+altair
+numpy
+pydeck
+streamlit

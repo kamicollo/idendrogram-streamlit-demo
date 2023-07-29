@@ -26,9 +26,9 @@ def get_sparse_wavelet_matrix(signals):
 
 @st.cache_data()
 def get_data():
-    impaired_signals = np.load("demo/data/impaired_signals.npy", allow_pickle=True)
-    ideal_signal = np.load("demo/data/ideal_signal.npy", allow_pickle=True)
-    network_clusters = np.load("demo/data/network_clusters.npy", allow_pickle=True)
+    impaired_signals = np.load("data/impaired_signals.npy", allow_pickle=True)
+    ideal_signal = np.load("data/ideal_signal.npy", allow_pickle=True)
+    network_clusters = np.load("data/network_clusters.npy", allow_pickle=True)
     sparse_matrix = get_sparse_wavelet_matrix(impaired_signals)
 
     return impaired_signals, ideal_signal, network_clusters, sparse_matrix
@@ -99,7 +99,7 @@ the clusters 2-5 that were produced by HDBSCAN weren't perfect and actually all 
 
 dendrogram = setup_dendrogram()
 
-converter = StreamlitConverter(release=False)
+converter = StreamlitConverter(release=True)
 
 c1, c2 = st.columns((2, 3))
 
